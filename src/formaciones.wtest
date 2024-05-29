@@ -1,0 +1,86 @@
+import formaciones.*
+import vagonesYlocomotoras.*
+	/* primera formacion*/
+	const formacion1 = new Formacion()
+	const vagonDePasajeros1 = new VagonDePasajeros(largo = 10, ancho = 4, estaOrdenado = true, tieneBanios = true)
+	const vagonDePasajeros2 = new VagonDePasajeros(largo = 7, ancho = 2, estaOrdenado = false, tieneBanios = false)
+	const vagonDeCarga = new VagonDeCarga(cargaMaximaIdeal = 6800, cantidadDeMaderaSuelta = 5)
+	const vagonDormitorio = new VagonDormitorio (cantidadDeCompartimientos = 8, cantidadDeCamasPorCompartimientos = 3)
+	
+	/* segunda formacion*/
+	
+	const formacion2 = new Formacion()
+	const vagonDeCarga2 = new VagonDeCarga(cargaMaximaIdeal = 8000, cantidadDeMaderaSuelta = 1)
+	const vagonDormitorio2 = new VagonDormitorio(cantidadDeCompartimientos = 15, cantidadDeCamasPorCompartimientos = 4)
+
+test "Comprobando los metodos con cada objeto creado para la primera formacion" {
+	
+	/* Seccion de tests de vagonDePasajeros1 */
+	
+	assert.equals(100, vagonDePasajeros1.cantidadDePasajeros())
+	assert.equals(10300, vagonDePasajeros1.pesoMaximo())
+	assert.equals(300, vagonDePasajeros1.cantidadMaximaDeCarga())
+	assert.that(vagonDePasajeros1.tieneBanios())
+	
+	/* Seccion de tests de vagonDePasajeros2 */
+	
+	assert.equals(41, vagonDePasajeros2.cantidadDePasajeros())
+	assert.equals(6080, vagonDePasajeros2.pesoMaximo())
+	assert.equals(800, vagonDePasajeros2.cantidadMaximaDeCarga())
+	assert.notThat(vagonDePasajeros2.tieneBanios())
+	
+	/* Seccion de tests de vagonDeCarga */
+	
+	assert.equals(0, vagonDeCarga.cantidadDePasajeros())
+	assert.equals(6300, vagonDeCarga.pesoMaximo())
+	assert.equals(4800, vagonDeCarga.cantidadMaximaDeCarga())
+	assert.notThat(vagonDeCarga.tieneBanios())
+	
+	/* Seccion de tests de vagonDeDormitorio */
+	
+	assert.equals(24, vagonDormitorio.cantidadDePasajeros())
+	assert.equals(7120, vagonDormitorio.pesoMaximo())
+	assert.equals(1200, vagonDormitorio.cantidadMaximaDeCarga())
+	assert.that(vagonDormitorio.tieneBanios())
+	
+}
+
+test "Comprobando el efecto de mantenimiento con la primera formacion"{
+	formacion1.agregarVagon(vagonDePasajeros1)
+	formacion1.agregarVagon(vagonDePasajeros2)
+	formacion1.agregarVagon(vagonDeCarga)
+	formacion1.agregarVagon(vagonDormitorio)
+	
+	assert.equals(165, formacion1.cantidadMaximaDePasajeros())
+	assert.equals(1, formacion1.cantidadDeVagonesPopulares())
+	assert.notThat(formacion1.formacionCarguera())
+	assert.equals(4220, formacion1.dispersionDePesos())
+	assert.equals(2, formacion1.cantidadDeBaniosEnUnaFormacion())
+	
+	formacion1.hacerMantenimiento()
+	
+	assert.equals(180, formacion1.cantidadMaximaDePasajeros())
+	assert.equals(2, formacion1.cantidadDeVagonesPopulares())
+	assert.notThat(formacion1.formacionCarguera())
+	assert.equals(3200, formacion1.dispersionDePesos())
+	assert.equals(2, formacion1.cantidadDeBaniosEnUnaFormacion())
+}
+
+test "Comprobando el efecto de mantenimiento con la segunda formacion"{
+	formacion2.agregarVagon(vagonDeCarga2)
+	formacion2.agregarVagon(vagonDormitorio2)
+	
+	assert.equals(60, formacion2.cantidadMaximaDePasajeros())
+	assert.equals(1, formacion2.cantidadDeVagonesPopulares())
+	assert.that(formacion2.formacionCarguera())
+	assert.equals(900, formacion2.dispersionDePesos())
+	assert.equals(1, formacion2.cantidadDeBaniosEnUnaFormacion())
+	
+	formacion2.hacerMantenimiento()
+	
+	assert.equals(60, formacion2.cantidadMaximaDePasajeros())
+	assert.equals(1, formacion2.cantidadDeVagonesPopulares())
+	assert.that(formacion2.formacionCarguera())
+	assert.equals(500, formacion2.dispersionDePesos())
+	assert.equals(1, formacion2.cantidadDeBaniosEnUnaFormacion())
+}
