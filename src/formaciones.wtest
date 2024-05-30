@@ -1,17 +1,22 @@
 import formaciones.*
 import vagonesYlocomotoras.*
-	/* primera formacion*/
-	const formacion1 = new Formacion()
-	const vagonDePasajeros1 = new VagonDePasajeros(largo = 10, ancho = 4, estaOrdenado = true, tieneBanios = true)
-	const vagonDePasajeros2 = new VagonDePasajeros(largo = 7, ancho = 2, estaOrdenado = false, tieneBanios = false)
-	const vagonDeCarga = new VagonDeCarga(cargaMaximaIdeal = 6800, cantidadDeMaderaSuelta = 5)
-	const vagonDormitorio = new VagonDormitorio (cantidadDeCompartimientos = 8, cantidadDeCamasPorCompartimientos = 3)
+
+/* Etapa 1 del test*/
 	
-	/* segunda formacion*/
+/* primera formacion*/
+const formacion1 = new Formacion()
+const vagonDePasajeros1 = new VagonDePasajeros(largo = 10, ancho = 4, estaOrdenado = true, tieneBanios = true)
+const vagonDePasajeros2 = new VagonDePasajeros(largo = 7, ancho = 2, estaOrdenado = false, tieneBanios = false)
+const vagonDeCarga = new VagonDeCarga(cargaMaximaIdeal = 6800, cantidadDeMaderaSuelta = 5)
+const vagonDormitorio = new VagonDormitorio (cantidadDeCompartimientos = 8, cantidadDeCamasPorCompartimientos = 3)
+const locomotora1 = new Locomotora(peso = 3000, pesoQuePuedeArrastrar = 20000, velocidadMaxima = 60)
+const locomotora2 = new Locomotora(peso = 5000, pesoQuePuedeArrastrar = 22000, velocidadMaxima = 60)
+
+/* segunda formacion*/
 	
-	const formacion2 = new Formacion()
-	const vagonDeCarga2 = new VagonDeCarga(cargaMaximaIdeal = 8000, cantidadDeMaderaSuelta = 1)
-	const vagonDormitorio2 = new VagonDormitorio(cantidadDeCompartimientos = 15, cantidadDeCamasPorCompartimientos = 4)
+const formacion2 = new Formacion()
+const vagonDeCarga2 = new VagonDeCarga(cargaMaximaIdeal = 8000, cantidadDeMaderaSuelta = 1)
+const vagonDormitorio2 = new VagonDormitorio(cantidadDeCompartimientos = 15, cantidadDeCamasPorCompartimientos = 4)
 
 test "Comprobando los metodos con cada objeto creado para la primera formacion" {
 	
@@ -83,4 +88,33 @@ test "Comprobando el efecto de mantenimiento con la segunda formacion"{
 	assert.that(formacion2.formacionCarguera())
 	assert.equals(500, formacion2.dispersionDePesos())
 	assert.equals(1, formacion2.cantidadDeBaniosEnUnaFormacion())
+}
+
+/* Etapa 2 del test*/
+
+test "Comprobando que el peso maximo de todos los vagones de la formación 1 sea de 29800"{
+	formacion1.agregarVagon(vagonDePasajeros1)
+	formacion1.agregarVagon(vagonDePasajeros2)
+	formacion1.agregarVagon(vagonDeCarga)
+	formacion1.agregarVagon(vagonDormitorio)
+	
+	assert.equals(29800, formacion1.sumaDePesoMaximoDeVagonesYPesoDeLocomotoras())
+}
+
+test "Comprobando los metodos nuevos para las locomotoras en la formacion 1, en este caso, primero usando la primera locomotora y luego agregando la segunda"{
+	formacion1.agregarVagon(vagonDePasajeros1)
+	formacion1.agregarVagon(vagonDePasajeros2)
+	formacion1.agregarVagon(vagonDeCarga)
+	formacion1.agregarVagon(vagonDormitorio)
+	formacion1.agregarLocomotora(locomotora1)
+	
+	assert.that(formacion1.esEficiente())
+	assert.notThat(formacion1.puedeMoverse())
+	assert.equals(12800, formacion1.kilosDeEmpujeFaltante())
+	
+	formacion1.agregarLocomotora(locomotora2)
+	
+	assert.notThat(formacion1.esEficiente())
+	assert.that(formacion1.puedeMoverse())
+	assert.equals(0, formacion1.kilosDeEmpujeFaltante())
 }

@@ -42,4 +42,5 @@ class Locomotora {
 	var property velocidadMaxima
 	
 	method esEficiente() = pesoQuePuedeArrastrar >= (peso * 5)
+	method pesoMaximo() = peso
 }
